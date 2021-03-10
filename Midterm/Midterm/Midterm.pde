@@ -6,9 +6,8 @@ PImage bird;
 PImage butterfly;
 PImage cactus;
 PImage flower;
-PImage mountain;
 
-int maxImages = 5;
+int maxImages = 4;
 int imageIndex = 0;
 
 PImage[] images = new PImage[maxImages];
@@ -25,10 +24,9 @@ images[0] = loadImage("bird.jpg");
 images[1] = loadImage("butterfly.jpg");
 images[2] = loadImage("cactus.jpg");
 images[3] = loadImage("flower.jpg");
-images[4] = loadImage("mountain.jpg");
 
 String[] filenames = {"bird.jpg","butterfly.jpg","cactus.jpg",
-                      "flower.jpg","mountain.jpg"};
+                      "flower.jpg"};
                       
   for (int i = 0; i < filenames.length; i++){
     images[i] = loadImage(filenames[i]);
