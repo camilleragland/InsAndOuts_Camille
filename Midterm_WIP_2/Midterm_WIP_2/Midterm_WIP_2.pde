@@ -7,14 +7,17 @@ int timer= 2000; //setting up timer variable for 2000 millisecond trigger
 int currentTime=0;
 int savedTime=0; 
 
+PImage[] items = new PImage [5];  
+int itemSelect = 0;
+boolean selection;
 
 PImage catHand;
 int handStop = 1580;
 int handPos = mouseX;
 
-PImage fish;
+
 int fall = 0;
-float fishX = random (1400);
+float itemX = random (1400);
 
 void setup() {
   fullScreen();
@@ -22,10 +25,13 @@ void setup() {
   
   catBlink = loadImage( "catblink_0.png");
   catHand = loadImage("cat_hand.png");
-  fish = loadImage("fish.png");
   
   for (int i = 0; i < blink.length; i++){
     blink[i] = loadImage ("catblink_" + i + ".png");
+  }
+  
+  for (int i = 0; i < items.length; i++){
+    items[i] = loadImage ("item_" + i + ".png");
   }
 }
 
@@ -49,8 +55,7 @@ catHand();
 void catblink(){
 imageMode(CENTER);
 image(blink[frame], 1670, 830, 500, 500);
-
-  forward = true;
+  forward = false;
   if (forward == true){
     if (frame == blink.length-1){
       frame = 0;
@@ -69,8 +74,10 @@ image(blink[frame], 1670, 830, 500, 500);
   }
 }
 
+
 void catHand(){
-  fish();
+  items();
+  
 image (catHand, mouseX, 900,500,500);
 catblink();
  if ( mouseX  > handStop) {
@@ -81,18 +88,43 @@ catblink();
  
 }
 
-void fish(){
+void items(){
+image(items[itemSelect], itemX ,fall, 300,300);
+if(fall <= 0){
+boolean selection = true;
 
-image(fish, fishX ,fall, 300,300);
-  if(fishX > (mouseX - 200) && fishX < (mouseX +200) && fall == 700){
+if (selection == true){
+  
+    if (itemSelect == items.length-1){
+      itemSelect = 0;
+    }
+    else{
+      itemSelect++;
+    } 
+  }
+  else {
+    if (itemSelect == 0){
+      itemSelect = items.length-1;
+    }
+    else {
+      itemSelect--;
+    }
+  }
+ 
+}
+ fall();
+}
+
+void fall (){
+if(itemX > (mouseX - 200) && itemX < (mouseX +200) && fall == 700){
     fall = 0;
-    fishX = random(1400);
+    itemX = random(1400);
     }
   else if (fall < 1200){
     fall = fall + 70;
   }
   else{
   fall = 0;
-  fishX = random(1400);
+  itemX = random(1400);
   }
 }
