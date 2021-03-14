@@ -1,12 +1,3 @@
-PImage catBlink;
-PImage[] blink = new PImage [8];  
-int frame = 0;
-boolean forward; 
-
-int timer= 2000; //setting up timer variable for 2000 millisecond trigger
-int currentTime=0;
-int savedTime=0; 
-
 PImage[] items = new PImage [5];  
 int itemSelect = 0;
 boolean selection;
@@ -25,84 +16,42 @@ PFont font;
 
 void setup() {
   fullScreen();
-  frameRate(10);
+  background (0);
   imageMode(CENTER); //draws images from center point
   font = createFont("font.TTF", 60,true);
+
+  //Assign image to object using loadImage() method
+  catHand= loadImage("cat_hand.png");
   
-  catBlink = loadImage( "catblink_0.png");
-  catHand = loadImage("cat_hand.png");
-  
-  for (int i = 0; i < blink.length; i++){
-    blink[i] = loadImage ("catblink_" + i + ".png");
-  }
-  
-  for (int i = 0; i < items.length; i++){
+for (int i = 0; i < items.length; i++){
     items[i] = loadImage ("item_" + i + ".png");
   }
 }
 
 void draw() {
-  catTimer();
-}
-
-void catTimer(){
-background(255, 160, 122);
-
+  background(255, 160, 122); 
+  items();
   fill(0);
   textSize(32);
   textFont(font);
   text(score, 500, 100);
   
-  catHand();
-  imageMode(CENTER);
-  image(catBlink, 1670, 830, 500, 500);
-  currentTime=millis();  //update currentTime in draw so that it is continuously updating
-  if (currentTime-savedTime > timer) { 
- catblink();
- savedTime=currentTime; //assign value of currentTime to savedTime
-   }
-
-}
-
-void catblink(){
-imageMode(CENTER);
-image(blink[frame], 1670, 830, 500, 500);
-  forward = false;
-  if (forward == true){
-    if (frame == blink.length-1){
-      frame = 0;
-    }
-    else{
-      frame++;
-    } 
-  }
-  else {
-    if (frame == 0){
-      frame = blink.length-1;
-    }
-    else {
-      frame--;
-    }
-  }
-}
-
-
-void catHand(){
-  items();
-  
-image (catHand, mouseX, 900,500,500);
-catblink();
- if ( mouseX  > handStop) {
+  //display image with image() method, x and y coordinate of image
+  tint(255);
+  image (catHand, mouseX, 900,500,500);
+  //is the player colliding with the ground?
+  if ( mouseX  > handStop) {
     tint(0);
    image(catHand,mouseX, 900,500,500);
    tint(255);
   }
- 
 }
 
 void items(){
 image(items[itemSelect], itemX ,fall, 300,300);
+
 if(fall <= 0){
+  
 boolean selection = true;
 
 if (selection == true){
@@ -127,8 +76,9 @@ if (selection == true){
  fall();
 }
 
+
 void fall (){
-if(itemX > (mouseX - 200) && itemX < (mouseX +200) && fall == 700){
+if(itemX > (mouseX - 200) && itemX < (mouseX +200) && fall == 690){
     fall = 0;
     itemX = random(1400);
     point = true;
@@ -138,12 +88,14 @@ if(itemX > (mouseX - 200) && itemX < (mouseX +200) && fall == 700){
     
     }
   else if (fall < 1200){
-    fall = fall + 175;
+    fall = fall + 15;
   }
   else{
   fall = 0;
   itemX = random(1400);
+  
   }
+   
 }
 
 void point (){
