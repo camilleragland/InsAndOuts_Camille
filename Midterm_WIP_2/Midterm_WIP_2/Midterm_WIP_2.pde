@@ -1,3 +1,9 @@
+import processing.sound.*;
+SoundFile meowSound;
+SoundFile angrySound;
+SoundFile pointSound;
+SoundFile background;
+
 PImage catBlink;
 PImage[] blink = new PImage [8];  
 int frame = 0;
@@ -7,7 +13,7 @@ PImage[] meow = new PImage [13];
 int meowFrame = 0;
 boolean forwardMeow;
 
-int timer2 = 3000;
+int timer2 = 6000;
 int currentMeow = 0;
 int savedMeow = 0;
 
@@ -40,9 +46,20 @@ void setup() {
   fullScreen();
   imageMode(CENTER); //draws images from center point
   font = createFont("font.TTF", 60,true);
+  
   frameRate(60);
   catBlink = loadImage( "catblink_0.png");
   catHand = loadImage("cat_hand.png");
+  
+  meowSound = new SoundFile(this, "meow.wav");
+  angrySound = new SoundFile(this, "angry.wav");
+  pointSound = new SoundFile(this, "point.wav");
+  background = new SoundFile(this, "background.wav");
+    background.amp(0.5);
+    meowSound.amp(0.3);
+    angrySound.amp(0.3);
+    pointSound.amp(0.1);
+
   
   for (int i = 0; i < blink.length; i++){
     blink[i] = loadImage ("catblink_" + i + ".png");
@@ -59,9 +76,12 @@ void setup() {
   for (int i = 0; i < angry.length; i++){
     angry[i] = loadImage ("angry_" + i + ".png");
   }
+  background.play();
+  background.loop();
 }
 
 void draw() {
+  
   catTimer();
   meowTimer();
   if(forward2==true){
@@ -107,12 +127,12 @@ imageMode(CENTER);
 image(meow[meowFrame], 1670, 830, 500, 500);
   forwardMeow = false;
   if (forwardMeow == true){
+    
     if (meowFrame == meow.length-1){
-      
       meowFrame = 0;
     }
     else{
-      meowFrame++; 
+      meowFrame++;
     } 
   }
   else {
@@ -120,6 +140,7 @@ image(meow[meowFrame], 1670, 830, 500, 500);
       meowFrame = meow.length-1;
     }
     else {
+      meowSound.play();
       meowFrame--;
     }
   }
@@ -217,6 +238,8 @@ if(itemX > (mouseX - 200) && itemX < (mouseX +200) && fall == 700){
 void points (){
 minusPoint();
 if(point == true){
+    pointSound.cue(1);
+    pointSound.play();
     score = score + 1;
     point = false;
     forward2 = false;
@@ -240,24 +263,31 @@ if (point == true && itemSelect == 2){
 void angry(){
 imageMode(CENTER);
 image(angry[next], 1670, 830, 500, 500);
- 
+  
   if (forward2 == true){
+    
     if (next == angry.length-1){
       next = 0;
+      angrySound.cue(5);
+      angrySound.play();
     }
     else{
       next ++;
+      
     }
   }
   else {
     
     if (next == 0){
+      
       next = angry.length-1;
     }
     else {
+     
       next --;
     }
    
   }
+  
    println(next);
 }
