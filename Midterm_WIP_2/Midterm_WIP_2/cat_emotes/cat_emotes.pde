@@ -3,6 +3,14 @@ PImage[] blink = new PImage [8];
 int frame = 0;
 boolean forward; 
 
+PImage[] meow = new PImage [13];
+int meowFrame = 0;
+boolean forwardMeow;
+
+int timer2 = 3000;
+int currentMeow = 0;
+int savedMeow = 0;
+
 int timer= 2000; //setting up timer variable for 2000 millisecond trigger
 int currentTime=0;
 int savedTime=0; 
@@ -27,6 +35,7 @@ boolean point = false;
 
 PFont font;
 
+//initialization
 void setup() {
   fullScreen();
   imageMode(CENTER); //draws images from center point
@@ -37,6 +46,10 @@ void setup() {
   
   for (int i = 0; i < blink.length; i++){
     blink[i] = loadImage ("catblink_" + i + ".png");
+  }
+  
+   for (int i = 0; i < meow.length; i++){
+    meow[i] = loadImage ("meow_" + i + ".png");
   }
   
   for (int i = 0; i < items.length; i++){
@@ -50,14 +63,20 @@ void setup() {
 
 void draw() {
   catTimer();
+  meowTimer();
+  if(forward2==true){
+    angry();
+   }
 }
 
+//timer for cat blinking
 void catTimer(){
 background(255, 160, 122);
 
   fill(0);
   textSize(32);
   textFont(font);
+  nf(score);
   text(score, 500, 100);
   
   catHand();
@@ -66,15 +85,46 @@ background(255, 160, 122);
   currentTime=millis();  //update currentTime in draw so that it is continuously updating
   if (currentTime-savedTime > timer) { 
  catblink();
- savedTime=currentTime; //assign value of currentTime to savedTime
-   }
+ savedTime=currentTime;
+   } 
+ }
    
-  if(forward2==true){
-    angry();
+   
+ //timer for meow  
+void meowTimer(){ 
+  imageMode(CENTER);
+  currentMeow = millis();
+  if (currentMeow - savedMeow > timer2) { 
+ catMeow();
+ savedMeow=currentMeow; 
    }
-
 }
 
+
+//meow array
+void catMeow(){
+imageMode(CENTER);
+image(meow[meowFrame], 1670, 830, 500, 500);
+  forwardMeow = false;
+  if (forwardMeow == true){
+    if (meowFrame == meow.length-1){
+      meowFrame = 0;
+    }
+    else{
+      meowFrame++;
+    } 
+  }
+  else {
+    if (meowFrame == 0){
+      meowFrame = meow.length-1;
+    }
+    else {
+      meowFrame--;
+    }
+  }
+}
+
+//blinking array
 void catblink(){
 imageMode(CENTER);
 image(blink[frame], 1670, 830, 500, 500);
@@ -97,7 +147,7 @@ image(blink[frame], 1670, 830, 500, 500);
   }
 }
 
-
+//hand movement
 void catHand(){
   items();
   
@@ -109,9 +159,9 @@ catblink();
    image(catHand,mouseX, 900,500,500);
    tint(255);
   }
- 
 }
 
+//items array
 void items(){
 image(items[itemSelect], itemX ,fall, 300,300);
 if(fall <= 0){
@@ -139,6 +189,7 @@ if (selection == true){
  fall();
 }
 
+//falling motion of items
 void fall (){
   
 if(itemX > (mouseX - 200) && itemX < (mouseX +200) && fall == 700){
@@ -161,7 +212,7 @@ if(itemX > (mouseX - 200) && itemX < (mouseX +200) && fall == 700){
    
 }
 
-
+//point system
 void points (){
 minusPoint();
 if(point == true){
@@ -171,15 +222,20 @@ if(point == true){
     } 
 }
 
+//subtraction of points
 void minusPoint (){
 if (point == true && itemSelect == 2){
-    score = score - 2;
+    score = score - 4;
     point = false;
     forward2 = true;
+      if(score <= 0){
+      score = 0;
+      }
     } 
 
 }
 
+//angry cat emote
 void angry(){
 imageMode(CENTER);
 image(angry[next], 1670, 830, 500, 500);
@@ -199,10 +255,8 @@ image(angry[next], 1670, 830, 500, 500);
     }
     else {
       next --;
-     //forward2 = false;
     }
    
   }
    println(next);
-  //println(score);
 }
